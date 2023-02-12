@@ -1,11 +1,11 @@
 import { gql } from '@apollo/client';
 
 const ADD_PRODUCT = gql`
-    mutation addProduct(
+    mutation AddProduct(
         $title: String!
         $description: String!
         $price: Float!
-        $categories: [String]!
+        $categories: [String]
         $image_url: String!
         $is_available: String!
         $client_id: ID!
@@ -26,6 +26,12 @@ const ADD_PRODUCT = gql`
             image_url
             is_available
             client_id
+            client {
+                client_id
+                name
+                phone
+                email
+            }
         }
     }
 `;

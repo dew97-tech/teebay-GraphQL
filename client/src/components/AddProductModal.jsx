@@ -8,12 +8,11 @@ import { GET_PRODUCTS_BY_CLIENT_ID } from './queries/getProductByClientQuery';
 const AddProductModal = () => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const [price, setPrice] = useState(0.0);
+    const [price, setPrice] = useState('');
     const [categories, setCategories] = useState([
         'Electronics',
-        'Sporting Goods',
-        'Gadget',
         'Furniture',
+        'Gadget',
     ]);
     // const { client_id } = useParams();
 
@@ -30,25 +29,33 @@ const AddProductModal = () => {
     // console.log(category);
 
     const [addProduct] = useMutation(ADD_PRODUCT, {
+        variables: {
+            title: title,
+            description: description,
+            price: price,
+            categories: categories,
+            image_url: image_url,
+            is_available: is_available,
+            client_id: client_id,
+        },
         refetchQueries: [
             {
                 query: GET_PRODUCTS_BY_CLIENT_ID,
-                variables: { client_id },
+                variables: { client_id: client_id },
             },
         ],
     });
 
     const onSubmit = (e) => {
-        e.preventDefault();
-        // console.log(
-        //     title,
-        //     description,
-        //     price,
-        //     categories,
-        //     image_url,
-        //     is_available,
-        //     client_id
-        // );
+        console.log(
+            title,
+            description,
+            price,
+            categories,
+            image_url,
+            is_available,
+            client_id
+        );
         if (
             title === '' ||
             description === '' ||
@@ -61,7 +68,7 @@ const AddProductModal = () => {
             return alert('Please Fill Up All Fields');
         }
 
-        // await addProduct(
+        // addProduct(
         //     title,
         //     description,
         //     price,
@@ -76,9 +83,7 @@ const AddProductModal = () => {
                 title: title,
                 description: description,
                 price: price,
-                categories: categories.map((category) => ({
-                    name: category,
-                })),
+                categories: categories,
                 image_url: image_url,
                 is_available: is_available,
                 client_id: client_id,
@@ -87,11 +92,12 @@ const AddProductModal = () => {
 
         setTitle('');
         setDescription('');
-        setPrice(0.0);
-        setCategories([]);
+        setPrice('');
+        setCategories(['']);
         setImageUrl('');
         setIsAvailable(false);
         setClientId(0);
+        console.log(addProduct);
     };
     return (
         <>
@@ -167,13 +173,12 @@ const AddProductModal = () => {
                                     </label>
                                     <input
                                         type="number"
-                                        step="0.1"
                                         min="0"
                                         className="form-control"
                                         id="price"
                                         value={price}
                                         onChange={(e) =>
-                                            setPrice(e.target.value)
+                                            setPrice(parseFloat(e.target.value))
                                         }
                                     />
                                 </div>
@@ -182,12 +187,12 @@ const AddProductModal = () => {
                                     <Multiselect
                                         isObject={false}
                                         options={categories}
-                                        onRemove={(event) => {
-                                            console.log(event);
-                                        }}
-                                        onSelect={(event) => {
-                                            console.log(event);
-                                        }}
+                                        // onRemove={(event) => {
+                                        //     console.log(event);
+                                        // }}
+                                        // onSelect={(event) => {
+                                        //     console.log(event);
+                                        // }}
                                         showCheckbox
                                     />
                                 </div>

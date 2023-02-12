@@ -20,21 +20,21 @@ const ProductType = new GraphQLObjectType({
         title: { type: GraphQLString },
         description: { type: GraphQLString },
         price: { type: GraphQLFloat },
-        // categories: { type: new GraphQLList(GraphQLString) },
-        categories: {
-            type: new GraphQLList(GraphQLString),
-            args: {
-                index: { type: GraphQLList(GraphQLInt) },
-            },
-            resolve(parent, args) {
-                if (args.index) {
-                    return parent.categories.filter((iter, item) =>
-                        args.index.includes(item)
-                    );
-                }
-                return parent.categories;
-            },
-        },
+        categories: { type: new GraphQLList(GraphQLString) },
+        // categories: {
+        //     type: new GraphQLList(GraphQLString),
+        //     args: {
+        //         index: { type: GraphQLList(GraphQLInt) },
+        //     },
+        //     resolve(parent, args) {
+        //         if (args.index) {
+        //             return parent.categories.filter((iter, item) =>
+        //                 args.index.includes(item)
+        //             );
+        //         }
+        //         return parent.categories;
+        //     },
+        // },
         image_url: { type: GraphQLString },
         is_available: { type: GraphQLString },
         client_id: { type: GraphQLID },
@@ -163,7 +163,7 @@ const RootQuery = new GraphQLObjectType({
 });
 
 // Mutations
-const mutation = new GraphQLObjectType({
+const Mutation = new GraphQLObjectType({
     name: 'Mutation',
     fields: {
         // Add Client to DB
@@ -213,30 +213,31 @@ const mutation = new GraphQLObjectType({
         addProduct: {
             type: ProductType,
             args: {
-                title: { type: GraphQLNonNull(GraphQLString) },
-                description: { type: GraphQLNonNull(GraphQLString) },
-                price: { type: GraphQLNonNull(GraphQLFloat) },
+                title: { type: new GraphQLNonNull(GraphQLString) },
+                description: { type: new GraphQLNonNull(GraphQLString) },
+                price: { type: new GraphQLNonNull(GraphQLFloat) },
                 categories: { type: new GraphQLList(GraphQLString) },
-                image_url: { type: GraphQLNonNull(GraphQLString) },
-                is_available: { type: GraphQLNonNull(GraphQLString) },
-                client_id: { type: GraphQLNonNull(GraphQLID) },
+                image_url: { type: new GraphQLNonNull(GraphQLString) },
+                is_available: { type: new GraphQLNonNull(GraphQLString) },
+                client_id: { type: new GraphQLNonNull(GraphQLID) },
             },
             async resolve(parent, args) {
-                const query = `
+                try {
+                    const query = `
                     INSERT INTO products (title, description, price, categories, image_url, is_available, client_id)
                     VALUES ($1, $2, $3, $4, $5, $6, $7)
                     RETURNING *
-                `;
-                const values = [
-                    args.title,
-                    args.description,
-                    args.price,
-                    args.categories,
-                    args.image_url,
-                    args.is_available,
-                    args.client_id,
-                ];
-                try {
+                    `;
+                    const values = [
+                        args.title,
+                        args.description,
+                        args.price,
+                        args.categories,
+                        args.image_url,
+                        args.is_available,
+                        args.client_id,
+                    ];
+
                     const res = await pool.query(query, values);
                     return res.rows[0];
                 } catch (err) {
@@ -299,5 +300,5 @@ const mutation = new GraphQLObjectType({
 // Exporting the RootQuery
 module.exports = new GraphQLSchema({
     query: RootQuery,
-    mutation,
+    mutation: Mutation,
 });

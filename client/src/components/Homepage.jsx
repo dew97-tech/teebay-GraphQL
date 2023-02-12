@@ -26,7 +26,7 @@ function Homepage() {
                 {data &&
                     data.products.map((product) => {
                         return (
-                            <div className="col" key={product.title}>
+                            <div className="col" key={product.prod_id}>
                                 <div className="card h-100 border-0">
                                     <img
                                         src="https://i.imgur.com/3VTaSeb.png"
