@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { gql, useQuery } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
 
@@ -20,6 +20,12 @@ const Login = () => {
     const [logedIn, setLogedIn] = useState(false);
     const [client_id, setClient_ID] = useState('');
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (logedIn) {
+            navigate(`/welcome/${client_id}`);
+        }
+    }, [logedIn, client_id, navigate]);
 
     if (loading) {
         return (
