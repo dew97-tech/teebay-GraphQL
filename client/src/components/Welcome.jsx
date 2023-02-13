@@ -5,6 +5,7 @@ import './styles/Welcome.css';
 import DeleteProduct from './DeleteProduct';
 import { GET_PRODUCTS_BY_CLIENT_ID } from './queries/getProductByClientQuery';
 import AddProductModal from './AddProductModal';
+import UpdateProduct from './UpdateProduct';
 
 const Welcome = () => {
     const { client_id } = useParams();
@@ -49,6 +50,10 @@ const Welcome = () => {
                         <DeleteProduct
                             key={product.prod_id}
                             product={product}
+                        />
+                        <UpdateProduct
+                            productID={product.prod_id}
+                            client_id={product.client.client_id}
                         />
                     </div>
                 ))}

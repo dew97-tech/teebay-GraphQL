@@ -30,6 +30,30 @@ const ADD_PRODUCT = gql`
     }
 `;
 
+const UPDATE_PRODUCT = gql`
+    mutation UpdateProduct(
+        $prod_id: ID!
+        $title: String!
+        $description: String!
+        $price: Float!
+        $is_available: String!
+    ) {
+        updateProduct(
+            prod_id: $prod_id
+            title: $title
+            description: $description
+            price: $price
+            is_available: $is_available
+        ) {
+            prod_id
+            title
+            description
+            price
+            is_available
+        }
+    }
+`;
+
 const DELETE_PRODUCT = gql`
     mutation deleteProduct($prod_id: ID!) {
         deleteProduct(prod_id: $prod_id) {
@@ -41,4 +65,4 @@ const DELETE_PRODUCT = gql`
     }
 `;
 
-export { DELETE_PRODUCT, ADD_PRODUCT };
+export { DELETE_PRODUCT, ADD_PRODUCT, UPDATE_PRODUCT };
