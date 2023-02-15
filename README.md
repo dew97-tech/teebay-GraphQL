@@ -31,4 +31,5 @@ SECRET=<secret_key>
 3.  Run `npm start` in both the client and server directories to start the project.
 
 4. Test Client for Login [email : John-Doe, phone: 544-544-5444]
+
 Feel free to contribute to the project by submitting a pull request.
